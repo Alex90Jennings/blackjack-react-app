@@ -3,6 +3,7 @@ import RenderCards from "./RenderCards";
 function Dealer(props) {
   const hand = props.dealerHand;
   const countScore = props.countScore;
+  const isBust = props.isBust;
 
   const score = countScore(hand);
 
@@ -11,7 +12,9 @@ function Dealer(props) {
       <div className="dashed-border-pink">
         <div className="three-columns-expand-one-three">
           <div></div>
-          <h2 className="dashed-border-blue">Boolean Dealer - {`${score}`}</h2>
+          <h2 className="dashed-border-blue">
+            Boolean Dealer - {isBust(hand) ? "BUST" : `${score}`}
+          </h2>
           <div></div>
         </div>
         <div className="three-columns-expand-one-three">

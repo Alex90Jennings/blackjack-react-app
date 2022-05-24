@@ -1,22 +1,16 @@
 import RenderCards from "./RenderCards";
+import RenderPlayerButtons from "./RenderPlayerButtons";
 
 function Player(props) {
   const hand = props.playerHand;
   const countScore = props.countScore;
   const dealerPlaysHand = props.dealerPlaysHand;
   const dealCardToPlayer = props.dealCardToPlayer;
+  const isBust = props.isBust;
+  const isTwentyOne = props.isTwentyOne;
+  const setAIState = props.setAIState;
 
   const score = countScore(hand);
-
-  const handleStandClick = (e) => {
-    e.preventDefault();
-    dealerPlaysHand();
-  };
-
-  const handleHitClick = (e) => {
-    e.preventDefault();
-    dealCardToPlayer();
-  };
 
   return (
     <section className="dashed-border-black center-wrapper">
@@ -28,21 +22,23 @@ function Player(props) {
         </div>
         <div className="three-columns-expand-one-three">
           <div></div>
-          <h2 className="dashed-border-blue">Player - {`${score}`}</h2>
+          <h2 className="dashed-border-blue">
+            Player - {isBust(hand) ? "BUST" : `${score}`}
+          </h2>
           <div></div>
         </div>
         <div className="three-columns-expand-one-three">
           <div></div>
           <div className="three-columns-expand-one-three">
             <div></div>
-            <ul className="four-columns-expand-one-three list-reset">
-              <li className="display-inline">
-                <button onClick={() => handleHitClick(hand)}>Hit</button>
-              </li>
-              <li className="display-inline">
-                <button onClick={() => handleStandClick(hand)}>Stand</button>
-              </li>
-            </ul>
+            <RenderPlayerButtons
+              hand={hand}
+              isBust={isBust}
+              dealCardToPlayer={dealCardToPlayer}
+              dealerPlaysHand={dealerPlaysHand}
+              isTwentyOne={isTwentyOne}
+              setAIState={setAIState}
+            />
             <div></div>
           </div>
           <div></div>

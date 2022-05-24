@@ -4,6 +4,7 @@ import "./index.css";
 import Blackjack from "./Blackjack";
 import EndPage from "./EndPage";
 import StartPage from "./StartPage";
+import { useNavigate } from "react-router-dom";
 
 const cardValue = {
   2: 2,
@@ -15,92 +16,89 @@ const cardValue = {
   8: 8,
   9: 9,
   10: 10,
-  J: 10,
-  Q: 10,
-  K: 10,
-  A: 1,
+  JACK: 10,
+  QUEEN: 10,
+  KING: 10,
+  ACE: 1,
 };
 
 export default function App() {
   const [dealerHand, setDealerHand] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
   const [cardDeck, setCardDeck] = useState([]);
-  const [shouldDealToDealer, setShouldDealToDealer] = useState(false);
-  const [shouldDealToPlayer, setShouldDealToPlayer] = useState(false);
-  let callADeck = true;
+  const [AIState, setAIState] = useState("waiting");
+  const [result, setResult] = useState(null);
 
   useEffect(() => {
-    if (callADeck) {
-      fetch(`http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`)
-        .then((res) => res.json())
-        .then((cardDeck) => {
-          console.log("fetched card decks:", cardDeck);
-          callADeck = false;
-          setCardDeck(cardDeck);
-        });
+    if (AIState === "checking score") {
+      dealerPlaysHand();
     }
+    if (AIState === "drawing a card") {
+      dealCardToDealer();
+    }
+    if (AIState === "end game") {
+      doesPlayerWin(dealerHand, playerHand);
+    }
+    if (AIState === "navigate") {
+      //link to /end;
+    }
+  });
+
+  useEffect(() => {
+    fetch(`http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`)
+      .then((res) => res.json())
+      .then((cardDeck) => {
+        setCardDeck(cardDeck);
+      });
   }, []);
 
-  useEffect(() => {
-    if (shouldDealToDealer) {
-      fetch(
-        `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=1`
-      )
-        .then((res) => res.json())
-        .then((card) => {
-          console.log("card", card);
-          setDealerHand([...dealerHand, card]);
-          setShouldDealToDealer(false);
-          console.log(dealerHand);
-        });
+  const dealCardToDealer = async () => {
+    const response = await fetch(
+      `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=1`
+    );
+    const result = await response.json();
+    const card = result.cards[0];
+    setDealerHand([...dealerHand, card]);
+    if (AIState !== "waiting") {
+      setAIState("checking score");
     }
-  }, [shouldDealToDealer]);
-
-  useEffect(() => {
-    if (shouldDealToPlayer) {
-      fetch(
-        `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=1`
-      )
-        .then((res) => res.json())
-        .then((card) => {
-          console.log("card", card);
-          setPlayerHand([...playerHand, card]);
-          setShouldDealToPlayer(false);
-          console.log(playerHand);
-        });
-    }
-  }, [shouldDealToPlayer]);
-
-  const dealCardToDealer = () => {
-    setShouldDealToDealer(true);
   };
 
-  const dealCardToPlayer = () => {
-    setShouldDealToDealer(true);
+  const dealCardToPlayer = async () => {
+    const response = await fetch(
+      `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=1`
+    );
+    const result = await response.json();
+    const card = result.cards[0];
+    setPlayerHand([...playerHand, card]);
   };
 
-  // dealCardToPlayer();
-  // setPlayerHand(dealCardToPlayer());
-  // setDealerHand(dealCardToDealer());
-  console.log("player hand: ", dealerHand);
+  const dealTwoCardsToPlayer = async () => {
+    const response = await fetch(
+      `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=2`
+    );
+    const result = await response.json();
+    const cardOne = result.cards[0];
+    const cardTwo = result.cards[1];
+    setPlayerHand([cardOne, cardTwo]);
+  };
 
-  // const startGame = () => {
-  //   setPlayerHand(dealCardToPlayer());
-  //   setPlayerHand(dealCardToPlayer());
-  //   setDealerHand(dealCardToDealer());
-  // };
+  const startGame = () => {
+    dealTwoCardsToPlayer();
+    dealCardToDealer();
+  };
 
   const dealerPlaysHand = () => {
-    while (countScore(dealerHand) < 17) {
-      dealCardToDealer(dealerHand);
+    if (countScore(dealerHand) < 17) {
+      setAIState("drawing a card");
     }
-    return countScore(dealerHand);
+    if (countScore(dealerHand) > 16) setAIState("end game");
   };
 
   const handHasAce = (hand) => {
     for (let i = 0; i < hand.length; i++) {
-      const numberOfCard = hand[i].number;
-      if (numberOfCard === 14) {
+      const numberOfCard = hand[i].value;
+      if (numberOfCard === "ACE") {
         return true;
       }
     }
@@ -112,10 +110,10 @@ export default function App() {
     let aceIsEleven = false;
     let makeElevenAceOne = false;
     for (let i = 0; i < hand.length; i++) {
-      const numberOfCard = hand[i].number;
+      const numberOfCard = hand[i].value;
       const valueOfCard = cardValue[numberOfCard];
       if (handHasAce(hand)) {
-        if (numberOfCard === 14 && !aceIsEleven) {
+        if (numberOfCard === "ACE" && !aceIsEleven) {
           aceIsEleven = true;
           sum += 10;
         }
@@ -129,19 +127,53 @@ export default function App() {
     return sum;
   };
 
-  const doesPlayerWin = (dealerHand, playerHand) => {
-    if (isBust(playerHand)) return false;
-    if (isBust(dealerHand)) return true;
-    if (countScore(dealerHand) > countScore(playerHand)) return false;
-    if (countScore(dealerHand) < countScore(playerHand)) return true;
-    if (countScore(dealerHand) === countScore(playerHand)) return 0;
+  const isTwentyOne = (hand) => {
+    if (countScore(hand) === 21) {
+      if (hand.length === 2) {
+        return "BLACKJACK";
+      } else return 21;
+    } else return countScore(hand);
   };
-
   const isBust = (hand) => {
     if (countScore(hand) < 22) {
       return false;
     }
     return true;
+  };
+
+  const doesPlayerWin = (dealerHand, playerHand) => {
+    console.log(
+      "dealer score: ",
+      countScore(dealerHand),
+      "playerScore: ",
+      countScore(playerHand)
+    );
+    if (isBust(playerHand)) {
+      setResult("YOU LOSE");
+    }
+    if (isBust(dealerHand)) {
+      setResult("YOU WIN");
+    }
+    if (
+      isTwentyOne(playerHand) === "BLACKJACK" &&
+      isTwentyOne(dealerHand) !== "BLACKJACK"
+    ) {
+      setResult("YOU WIN DOUBLE");
+    }
+    if (isTwentyOne(dealerHand) === 0 && isTwentyOne(playerHand) !== 0) {
+      setResult("YOU LOSE");
+    }
+    if (countScore(dealerHand) > countScore(playerHand)) {
+      setResult("YOU LOSE");
+    }
+    if (countScore(dealerHand) < countScore(playerHand)) {
+      setResult("YOU WIN");
+    }
+    if (countScore(dealerHand) === countScore(playerHand)) {
+      setResult("IT'S A TIE");
+    }
+
+    setAIState("navigate");
   };
 
   return (
@@ -150,6 +182,7 @@ export default function App() {
         <Routes>
           <Route path="/" element={<StartPage />} />
           <Route
+            // {AIState === "navigate" ? <Redirect to="/end" /> : <EndPage result={result} />}
             path="/play"
             element={
               <Blackjack
@@ -160,13 +193,14 @@ export default function App() {
                 dealCardToPlayer={dealCardToPlayer}
                 countScore={countScore}
                 dealerPlaysHand={dealerPlaysHand}
+                isBust={isBust}
+                isTwentyOne={isTwentyOne}
+                startGame={startGame}
+                setAIState={setAIState}
               />
             }
           />
-          <Route
-            path="/end"
-            element={<EndPage doesPlayerWin={doesPlayerWin} />}
-          />
+          <Route path="/end" element={<EndPage result={result} />} />
         </Routes>
       </main>
     </>
