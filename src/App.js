@@ -29,6 +29,37 @@ export default function App() {
   const [AIState, setAIState] = useState("waiting");
   const [result, setResult] = useState(null);
 
+  // const [gameState, setGameState] = useState(0)
+
+  //   if (gameState === 0) {
+  //     triggered by deal button;
+  //      deals the cards
+  //      setGameState(1)
+  //   }
+  //   if (gameState === 1) {
+  //     initialise game
+  //      deal 2 cards to player and 1 to dealer
+  //      setGameState(2)
+  //   }
+  //   if (gameState === 2 {
+  //     player decides hit or stand
+  //      if player bust setGameState(4)
+  //      else setGameState(3)
+  //   }
+  //   if (gameState === 3) {
+  //     runs dealerAI
+  //      setGameState(4)
+  //   }
+  //   if (gameState === 4) {
+  //     compare scores
+  //      setResult(result)
+  //      setGameState(5)
+  //   }
+  //   if (gameState === 5) {
+  //     use result to render "you win" or "you lose" or "you tie"
+  //       button to redeal setGameState(0)
+  //   }
+
   useEffect(() => {
     if (AIState === "checking score") {
       dealerPlaysHand();
