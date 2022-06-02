@@ -74,6 +74,7 @@ a {
   background-color: #804000;
   text-decoration: none;
   color: black;
+  width: 100%;
 }
 
 .display-inline {
@@ -86,6 +87,11 @@ a {
   grid-template-rows: auto auto auto 1fr;
   max-height: 100vh;
   max-width: 100vw;
+}
+
+.seven-columns-expand-one-seven {
+  display: grid;
+  grid-template-columns: 1fr auto auto auto auto auto 1fr;
 }
 
 .three-columns-expand-one-three {

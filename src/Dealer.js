@@ -4,7 +4,6 @@ function Dealer(props) {
   const hand = props.dealerHand;
   const countScore = props.countScore;
   const isBust = props.isBust;
-
   const score = countScore(hand);
 
   return (

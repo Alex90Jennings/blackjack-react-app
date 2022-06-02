@@ -1,53 +1,104 @@
+import { Link } from "react-router-dom";
+
 function RenderCards(props) {
   const hand = props.hand;
   const isBust = props.isBust;
   const dealCardToPlayer = props.dealCardToPlayer;
-  const dealerPlaysHand = props.dealerPlaysHand;
   const isTwentyOne = props.isTwentyOne;
-  const setAIState = props.setAIState;
+  const setGameState= props.setGameState
+  const gameState = props.gameState
+  const wallet = props.wallet
+  const dealerHand = props.dealerHand
+  const result = props.result
+  const bet = props.bet
+  const setBet = props.setBet
 
-  const handleStandClick = () => {
-    dealerPlaysHand();
-    setAIState("drawing a card");
-  };
+
+  const increaseBetAmount = () => {
+    if(bet<1000 && wallet - bet >= 5) setBet(bet+5)
+  }
+
+  const increaseBetAmountAlot = () => {
+    if(bet<900 && wallet - bet >= 100) setBet(bet+100)
+  }
+
+  const decreaseBetAmount = () => {
+    if(bet>5) setBet(bet-5)
+  }
+
+    const decreaseBetAmountAlot = () => {
+    if(bet>105) setBet(bet-100)
+  }
 
   return (
     <>
-      {isTwentyOne(hand) < 21 && (
+      {hand.length === 0 && (
+        <ul className="seven-columns-expand-one-seven list-reset">
+          <div></div>
+          <li className="display-inline">
+            <button onClick={() => decreaseBetAmountAlot()}>-100</button>
+          </li>
+          <li className="display-inline">
+            <button onClick={() => decreaseBetAmount()}>-5</button>
+          </li>
+          <li className="display-inline">
+            <button onClick= {() => setGameState("deal first card to player")}>{`CLICK TO BET: ${bet}`}</button>
+          </li>
+          <li className="display-inline">
+            <button onClick={() => increaseBetAmount()}>+5</button>
+          </li>
+          <li className="display-inline">
+            <button onClick={() => increaseBetAmountAlot()}>+100</button>
+          </li>
+          <div></div>
+        </ul>
+      )}
+      {!result && hand.length !== 0 && isTwentyOne(hand) < 21 && (
         <ul className="four-columns-expand-one-four list-reset">
           <div></div>
           <li className="display-inline">
             <button onClick={() => dealCardToPlayer()}>HIT</button>
           </li>
           <li className="display-inline">
-            <button onClick={() => handleStandClick()}>STAND</button>
+            <button onClick={() => setGameState("dealer AI")}>STAND</button>
           </li>
           <div></div>
         </ul>
       )}
-      {isBust(hand) && (
+      {!result && hand.length !== 0  && isBust(hand) && (
         <ul className="three-columns-expand-one-three list-reset">
           <div></div>
           <li className="display-inline">
-            <button onClick={() => setAIState("end game")}>😱😱😱😱😱😱</button>
+            <button onClick={() => setGameState("end game")}><Link to="/end">😱😱😱😱😱😱</Link></button>
           </li>
           <div></div>
         </ul>
       )}
-      {isTwentyOne(hand) === 21 && (
+      {!result && hand.length !== 0 && (isTwentyOne(hand) === 21 || isBust(dealerHand)) && (
         <ul className="three-columns-expand-one-three list-reset">
           <div></div>
           <li className="display-inline">
-            <button onClick={() => handleStandClick()}>🙂🙂🙂🙂🙂🙂</button>
+            <button onClick={() =>  setGameState("dealer AI")}>🙂🙂🙂🙂🙂🙂</button>
           </li>
           <div></div>
         </ul>
       )}
-      {isTwentyOne(hand) === "BLACKJACK" && (
+      {!result && hand.length !== 0 && isTwentyOne(hand) === "BLACKJACK" && (
         <ul className="three-columns-expand-one-three list-reset">
           <div></div>
           <li className="display-inline">
-            <button onClick={() => handleStandClick()}>😍😍😍😍😍😍</button>
+            <button onClick={() =>  setGameState("dealer AI")}>
+              😍😍😍😍😍😍
+            </button>
+          </li>
+          <div></div>
+        </ul>
+      )}
+      {result && (
+        <ul className="three-columns-expand-one-three list-reset">
+          <div></div>
+          <li className="display-inline">
+            <button onClick={() =>  setGameState("dealer AI")}><Link to="/end">{result}</Link></button>
           </li>
           <div></div>
         </ul>

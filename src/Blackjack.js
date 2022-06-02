@@ -3,7 +3,6 @@ import Header from "./Header";
 import Dealer from "./Dealer";
 import Player from "./Player";
 import Rules from "./Rules";
-import { useEffect } from "react";
 
 function Blackjack(props) {
   const dealerHand = props.dealerHand;
@@ -14,12 +13,13 @@ function Blackjack(props) {
   const dealerPlaysHand = props.dealerPlaysHand;
   const isBust = props.isBust;
   const isTwentyOne = props.isTwentyOne;
-  const startGame = props.startGame;
   const setAIState = props.setAIState;
-
-  useEffect(() => {
-    startGame();
-  }, []);
+  const gameState= props.gameState
+  const setGameState= props.setGameState
+  const result = props.result
+  const bet = props.bet
+  const setBet = props.setBet
+  const wallet = props.wallet
 
   return (
     <div className="App main-container">
@@ -29,15 +29,24 @@ function Blackjack(props) {
         setDealerHand={setDealerHand}
         countScore={countScore}
         isBust={isBust}
+        gameState={gameState}
+        setGameState={setGameState}
       />
       <Player
         playerHand={playerHand}
+        dealerHand={dealerHand}
         dealCardToPlayer={dealCardToPlayer}
         countScore={countScore}
         dealerPlaysHand={dealerPlaysHand}
         isBust={isBust}
         isTwentyOne={isTwentyOne}
         setAIState={setAIState}
+        gameState={gameState}
+        setGameState={setGameState}
+        result={result}
+        bet={bet}
+        setBet={setBet}
+        wallet={wallet}
       />
       <Rules />
     </div>

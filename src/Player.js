@@ -8,9 +8,14 @@ function Player(props) {
   const dealCardToPlayer = props.dealCardToPlayer;
   const isBust = props.isBust;
   const isTwentyOne = props.isTwentyOne;
-  const setAIState = props.setAIState;
-
+  const setGameState= props.setGameState
+  const gameState = props.gameState
+  const dealerHand = props.dealerHand
+  const result = props.result
   const score = countScore(hand);
+  const bet = props.bet
+  const setBet = props.setBet
+  const wallet = props.wallet
 
   return (
     <section className="dashed-border-black center-wrapper">
@@ -23,7 +28,7 @@ function Player(props) {
         <div className="three-columns-expand-one-three">
           <div></div>
           <h2 className="dashed-border-blue">
-            Player - {isBust(hand) ? "BUST" : `${score}`}
+            Player - {isBust(hand) ? "BUST" : `${score}`} - Wallet: {wallet}
           </h2>
           <div></div>
         </div>
@@ -37,7 +42,13 @@ function Player(props) {
               dealCardToPlayer={dealCardToPlayer}
               dealerPlaysHand={dealerPlaysHand}
               isTwentyOne={isTwentyOne}
-              setAIState={setAIState}
+              setGameState={setGameState}
+              gameState={gameState}
+              dealerHand={dealerHand}
+              result={result}
+              bet={bet}
+              setBet={setBet}
+              wallet={wallet}
             />
             <div></div>
           </div>
