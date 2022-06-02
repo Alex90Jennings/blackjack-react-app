@@ -6,12 +6,13 @@ function RenderCards(props) {
   const dealCardToPlayer = props.dealCardToPlayer;
   const isTwentyOne = props.isTwentyOne;
   const setGameState= props.setGameState
-  const gameState = props.gameState
   const wallet = props.wallet
   const dealerHand = props.dealerHand
   const result = props.result
   const bet = props.bet
   const setBet = props.setBet
+
+  setBet( Math.floor(wallet/2))
 
 
   const increaseBetAmount = () => {

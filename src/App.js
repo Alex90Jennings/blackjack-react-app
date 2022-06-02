@@ -1,10 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./index.css";
 import Blackjack from "./Blackjack";
 import EndPage from "./EndPage";
 import StartPage from "./StartPage";
-import { useNavigate } from "react-router-dom";
 
 const cardValue = {
   2: 2,
