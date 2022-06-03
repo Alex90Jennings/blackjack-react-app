@@ -11,7 +11,7 @@ function StartPage(props) {
           <div className="three-columns-expand-one-three">
             <div></div>
             <div>
-              <h1>Play A Hand?</h1>
+              <h1>PLAY A HAND?</h1>
             </div>
             <div></div>
           </div>

@@ -1,12 +1,12 @@
 function Header() {
   return (
-    <header className="three-column dashed-border-black three-columns-expand-one-three">
-      <div className="dashed-border-pink"></div>
-      <h1 className="dashed-border-blue">
+    <header className="border-gold-top-bottom three-columns-expand-one-three pd-m">
+      <div></div>
+      <h1>
         <span className="gold">$$$</span> BOOLEAN BLACKJACK{" "}
         <span className="gold">$$$</span>
       </h1>
-      <div className="dashed-border-pink"></div>
+      <div></div>
     </header>
   );
 }

@@ -19,8 +19,8 @@ function Player(props) {
   const doubled = props.doubled
 
   return (
-    <section className="dashed-border-black center-wrapper">
-      <div className="dashed-border-pink">
+    <section className="center-wrapper">
+      <div>
         <div className="three-columns-expand-one-three">
           <div></div>
           <RenderCards hand={hand} />
@@ -28,15 +28,15 @@ function Player(props) {
         </div>
         <div className="three-columns-expand-one-three">
           <div></div>
-          <h2 className="dashed-border-blue">
-            Player - {isBust(hand) ? "BUST" : `${score}`}
+          <h2>
+            PLAYER SCORE - {isBust(hand) ? "BUST" : `${score}`}
           </h2>
           <div></div>
         </div>
         <div className="three-columns-expand-one-three">
           <div></div>
-          <h2 className="dashed-border-blue">
-            Wallet: {wallet}
+          <h2>
+            WALLET: {wallet} BET: {bet}
           </h2>
           <div></div>
         </div>

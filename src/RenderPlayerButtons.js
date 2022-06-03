@@ -16,11 +16,11 @@ function RenderCards(props) {
 
 
   const increaseBetAmount = () => {
-    if(bet<1000 && wallet - bet >= 5) setBet(bet+5)
+    if(wallet - bet >= 5) setBet(bet+5)
   }
 
   const increaseBetAmountAlot = () => {
-    if(bet<900 && wallet - bet >= 100) setBet(bet+100)
+    if(wallet - bet >= 100) setBet(bet+100)
   }
 
   const decreaseBetAmount = () => {
@@ -31,15 +31,15 @@ function RenderCards(props) {
     if(bet>105) setBet(bet-100)
   }
 
-    const canSplit = (hand) => {
-      if(hand.length === 2 && countScore(hand) < 12 && countScore(hand) > 8) return true
+    const canDouble = (hand) => {
+      if(hand.length === 2 && countScore(hand) < 12 && countScore(hand) > 8 && wallet > bet * 2) return true
       return false
     }
 
   return (
     <>
       {hand.length === 0 && (
-        <ul className="seven-columns-expand-one-seven list-reset">
+        <ul className="seven-columns-expand-one-seven list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() => decreaseBetAmountAlot()}>-100</button>
@@ -48,7 +48,7 @@ function RenderCards(props) {
             <button onClick={() => decreaseBetAmount()}>-5</button>
           </li>
           <li className="display-inline">
-            <button onClick= {() => setGameState("deal first card to player")}>{`CLICK TO BET: ${bet}`}</button>
+            <button onClick= {() => setGameState("deal first card to player")}>{`CLICK TO BET : ${bet}`}</button>
           </li>
           <li className="display-inline">
             <button onClick={() => increaseBetAmount()}>+5</button>
@@ -59,8 +59,8 @@ function RenderCards(props) {
           <div></div>
         </ul>
       )}
-      {!doubled && !result && !canSplit(hand) && hand.length !== 0 && isTwentyOne(hand) < 21 && (
-        <ul className="four-columns-expand-one-four list-reset">
+      {!doubled && !result && !canDouble(hand) && hand.length !== 0 && isTwentyOne(hand) < 21 && (
+        <ul className="four-columns-expand-one-four list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() => dealCardToPlayer()}>HIT</button>
@@ -71,8 +71,8 @@ function RenderCards(props) {
           <div></div>
         </ul>
       )}
-      {canSplit(hand) && hand.length===2 && (
-        <ul className="five-columns-expand-one-five list-reset">
+      {canDouble(hand) && hand.length===2 && (
+        <ul className="five-columns-expand-one-five list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() => dealCardToPlayer()}>HIT</button>
@@ -87,7 +87,7 @@ function RenderCards(props) {
         </ul>
       )}
       {doubled && countScore(hand) < 21 && (
-        <ul className="three-columns-expand-one-three list-reset">
+        <ul className="three-columns-expand-one-three list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() => setGameState("dealer AI")}>STAND</button>
@@ -96,7 +96,7 @@ function RenderCards(props) {
         </ul>
       )}
       {!result && hand.length !== 0  && isBust(hand) && (
-        <ul className="three-columns-expand-one-three list-reset">
+        <ul className="three-columns-expand-one-three list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() => setGameState("end game")}><Link to="/end">😱😱😱😱😱😱</Link></button>
@@ -105,7 +105,7 @@ function RenderCards(props) {
         </ul>
       )}
       {!result && !result && hand.length !== 0 && (isTwentyOne(hand) === 21 || isBust(dealerHand)) && (
-        <ul className="three-columns-expand-one-three list-reset">
+        <ul className="three-columns-expand-one-three list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() =>  setGameState("dealer AI")}>🙂🙂🙂🙂🙂🙂</button>
@@ -114,7 +114,7 @@ function RenderCards(props) {
         </ul>
       )}
       {!result && hand.length !== 0 && isTwentyOne(hand) === "BLACKJACK" && (
-        <ul className="three-columns-expand-one-three list-reset">
+        <ul className="three-columns-expand-one-three list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() =>  setGameState("dealer AI")}>
@@ -125,7 +125,7 @@ function RenderCards(props) {
         </ul>
       )}
       {!doubled && result && (
-        <ul className="three-columns-expand-one-three list-reset">
+        <ul className="three-columns-expand-one-three list-reset mg-m-bottom">
           <div></div>
           <li className="display-inline">
             <button onClick={() =>  setGameState("dealer AI")}><Link to="/end">{`${result}` === "IT'S A TIE" ? `${result}` : `${result} ${bet}`}</Link></button>

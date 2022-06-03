@@ -47,16 +47,22 @@ function EndPage(props) {
           <div className="three-columns-expand-one-three">
             <div></div>
             <div>
-              <h1>{wallet>0 ? `${result}` : "YOU LOST ALL YOUR MONEY"} </h1>
-              <h2>Remaining balance: {`${wallet}`}</h2>
+              <div className="three-columns-expand-one-three">
+                <div></div>
+                <h1>{wallet>0 ? `${result}` : "YOU LOST ALL YOUR MONEY"} </h1>
+                <div></div>
+              </div>         
+              <div className="three-columns-expand-one-three">
+                <div></div>
+                <h2>REMAINING BALANCE: {`${wallet}`}</h2>
+                <div></div>
+              </div>            
             </div>
             <div></div>
           </div>
-          <div className="three-columns-expand-one-three">
+          <div className= "three-columns-expand-one-three">
             <div></div>
-            <button className="center-wrapper" onClick={() => handleClick()}>
-               {wallet>0 ? <Link to="/play">PLAY AGAIN</Link> : "YOU LOSE"} 
-            </button>
+            {wallet>0 ? <button className="center-wrapper" onClick={() => handleClick()}><Link to="/play">PLAY AGAIN</Link></button> : ""} 
             <div></div>
           </div>
         </div>

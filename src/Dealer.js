@@ -7,12 +7,12 @@ function Dealer(props) {
   const score = countScore(hand);
 
   return (
-    <section className="dashed-border-black center-wrapper">
-      <div className="dashed-border-pink">
+    <section className="center-wrapper">
+      <div>
         <div className="three-columns-expand-one-three">
           <div></div>
-          <h2 className="dashed-border-blue">
-            Boolean Dealer - {isBust(hand) ? "BUST" : `${score}`}
+          <h2>
+            BOOLEAN DEALER SCORE - {isBust(hand) ? "BUST" : `${score}`}
           </h2>
           <div></div>
         </div>
