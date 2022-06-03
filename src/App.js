@@ -21,6 +21,8 @@ const cardValue = {
   14: 1,
 };
 
+let doubled = false
+
 export default function App() {
   const [dealerHand, setDealerHand] = useState([]);
   const [playerHand, setPlayerHand] = useState([]);
@@ -29,7 +31,7 @@ export default function App() {
   const [result, setResult] = useState(null);
   const [gameState, setGameState] = useState(null)
   const [wallet, setWallet] = useState(1000)
-  const [bet, setBet] = useState(200)
+  const [bet, setBet] = useState(250)
 
   const retrieveNewDeckOfCards = () => {
     const suits = ['clubs', 'diamonds', 'hearts', 'spades']
@@ -124,16 +126,6 @@ export default function App() {
       "playerScore: ",
       countScore(playerHand)
     );
-    if (isBust(playerHand)) {
-      console.log("player went bust")
-      setResult("YOU LOSE");
-      return
-    }
-    if (isBust(dealerHand)) {
-      console.log("dealer went bust")
-      setResult("YOU WIN");
-      return
-    }
     if (
       isTwentyOne(playerHand) === "BLACKJACK" &&
       isTwentyOne(dealerHand) !== "BLACKJACK"
@@ -142,9 +134,19 @@ export default function App() {
       setResult("YOU WIN DOUBLE");
       return
     }
+    if (isBust(playerHand)) {
+      console.log("player went bust")
+      setResult("YOU LOSE");
+      return
+    }
     if (isTwentyOne(dealerHand) === "BLACKJACK" && isTwentyOne(playerHand) !== "BLACKJACK") {
       console.log("dealer got a blackjack and you didn't")
       setResult("YOU LOSE");
+      return
+    }
+    if (isBust(dealerHand)) {
+      console.log("dealer went bust")
+      setResult("YOU WIN");
       return
     }
     if (countScore(dealerHand) > countScore(playerHand)) {
@@ -163,6 +165,8 @@ export default function App() {
       return
     }
   };
+
+  if (bet > wallet) setBet(wallet)
 
     if (gameState === "retrieve deck of cards") {
       retrieveNewDeckOfCards()
@@ -185,7 +189,14 @@ export default function App() {
       if(isTwentyOne(playerHand) === "BLACKJACK" && countScore(dealerHand) < 10 ) setGameState("end game")
       if(isBust(playerHand)) setGameState("compare scores")
     }
+    if (gameState === "double") {
+      setBet(bet*2)
+      dealCardToPlayer();
+      doubled = true
+      setGameState("player decision")
+    }
     if (gameState === "dealer AI") {
+      doubled = false
       setAIState("checking score")
     }
     if(gameState === "compare scores"){
@@ -231,6 +242,7 @@ export default function App() {
                 setWallet={setWallet}
                 bet={bet}
                 setBet={setBet}
+                doubled={doubled}
               />
             }
           />

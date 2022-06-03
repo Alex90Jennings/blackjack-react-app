@@ -47,7 +47,7 @@ function EndPage(props) {
           <div className="three-columns-expand-one-three">
             <div></div>
             <div>
-              <h1>{`${result}`}</h1>
+              <h1>{wallet>0 ? `${result}` : "YOU LOST ALL YOUR MONEY"} </h1>
               <h2>Remaining balance: {`${wallet}`}</h2>
             </div>
             <div></div>

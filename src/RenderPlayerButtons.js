@@ -11,8 +11,8 @@ function RenderCards(props) {
   const result = props.result
   const bet = props.bet
   const setBet = props.setBet
-
-  setBet( Math.floor(wallet/2))
+  const countScore = props.countScore
+  const doubled = props.doubled
 
 
   const increaseBetAmount = () => {
@@ -30,6 +30,11 @@ function RenderCards(props) {
     const decreaseBetAmountAlot = () => {
     if(bet>105) setBet(bet-100)
   }
+
+    const canSplit = (hand) => {
+      if(hand.length === 2 && countScore(hand) < 12 && countScore(hand) > 8) return true
+      return false
+    }
 
   return (
     <>
@@ -54,12 +59,36 @@ function RenderCards(props) {
           <div></div>
         </ul>
       )}
-      {!result && hand.length !== 0 && isTwentyOne(hand) < 21 && (
+      {!doubled && !result && !canSplit(hand) && hand.length !== 0 && isTwentyOne(hand) < 21 && (
         <ul className="four-columns-expand-one-four list-reset">
           <div></div>
           <li className="display-inline">
             <button onClick={() => dealCardToPlayer()}>HIT</button>
           </li>
+          <li className="display-inline">
+            <button onClick={() => setGameState("dealer AI")}>STAND</button>
+          </li>
+          <div></div>
+        </ul>
+      )}
+      {canSplit(hand) && hand.length===2 && (
+        <ul className="five-columns-expand-one-five list-reset">
+          <div></div>
+          <li className="display-inline">
+            <button onClick={() => dealCardToPlayer()}>HIT</button>
+          </li>
+          <li className="display-inline">
+            <button onClick={() => setGameState("dealer AI")}>STAND</button>
+          </li>
+          <li className="display-inline">
+            <button onClick={() => setGameState("double")}>DOUBLE</button>
+          </li>
+          <div></div>
+        </ul>
+      )}
+      {doubled && countScore(hand) < 21 && (
+        <ul className="three-columns-expand-one-three list-reset">
+          <div></div>
           <li className="display-inline">
             <button onClick={() => setGameState("dealer AI")}>STAND</button>
           </li>
@@ -75,7 +104,7 @@ function RenderCards(props) {
           <div></div>
         </ul>
       )}
-      {!result && hand.length !== 0 && (isTwentyOne(hand) === 21 || isBust(dealerHand)) && (
+      {!result && !result && hand.length !== 0 && (isTwentyOne(hand) === 21 || isBust(dealerHand)) && (
         <ul className="three-columns-expand-one-three list-reset">
           <div></div>
           <li className="display-inline">
@@ -95,11 +124,11 @@ function RenderCards(props) {
           <div></div>
         </ul>
       )}
-      {result && (
+      {!doubled && result && (
         <ul className="three-columns-expand-one-three list-reset">
           <div></div>
           <li className="display-inline">
-            <button onClick={() =>  setGameState("dealer AI")}><Link to="/end">{result}</Link></button>
+            <button onClick={() =>  setGameState("dealer AI")}><Link to="/end">{`${result}` === "IT'S A TIE" ? `${result}` : `${result} ${bet}`}</Link></button>
           </li>
           <div></div>
         </ul>

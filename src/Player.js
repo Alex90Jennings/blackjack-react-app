@@ -16,6 +16,7 @@ function Player(props) {
   const bet = props.bet
   const setBet = props.setBet
   const wallet = props.wallet
+  const doubled = props.doubled
 
   return (
     <section className="dashed-border-black center-wrapper">
@@ -28,7 +29,14 @@ function Player(props) {
         <div className="three-columns-expand-one-three">
           <div></div>
           <h2 className="dashed-border-blue">
-            Player - {isBust(hand) ? "BUST" : `${score}`} - Wallet: {wallet}
+            Player - {isBust(hand) ? "BUST" : `${score}`}
+          </h2>
+          <div></div>
+        </div>
+        <div className="three-columns-expand-one-three">
+          <div></div>
+          <h2 className="dashed-border-blue">
+            Wallet: {wallet}
           </h2>
           <div></div>
         </div>
@@ -49,6 +57,8 @@ function Player(props) {
               bet={bet}
               setBet={setBet}
               wallet={wallet}
+              countScore={countScore}
+              doubled={doubled}
             />
             <div></div>
           </div>

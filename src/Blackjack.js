@@ -20,6 +20,7 @@ function Blackjack(props) {
   const bet = props.bet
   const setBet = props.setBet
   const wallet = props.wallet
+  const doubled = props.doubled
 
   return (
     <div className="App main-container">
@@ -47,6 +48,7 @@ function Blackjack(props) {
         bet={bet}
         setBet={setBet}
         wallet={wallet}
+        doubled={doubled}
       />
       <Rules />
     </div>
