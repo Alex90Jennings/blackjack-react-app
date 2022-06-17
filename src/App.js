@@ -29,51 +29,35 @@ export default function App() {
   const [AIState, setAIState] = useState("waiting");
   const [result, setResult] = useState(null);
 
-  // const [gameState, setGameState] = useState(0)
-
-  //   if (gameState === 0) {
+  // const [gameState, setGameState] = useState(null)
+  //   if (gameState === "pre game") {
   //     triggered by deal button;
   //      deals the cards
   //      setGameState(1)
   //   }
-  //   if (gameState === 1) {
+  //   if (gameState === "game prep") {
   //     initialise game
   //      deal 2 cards to player and 1 to dealer
   //      setGameState(2)
   //   }
-  //   if (gameState === 2 {
+  //   if (gameState === "user input") {
   //     player decides hit or stand
   //      if player bust setGameState(4)
   //      else setGameState(3)
   //   }
-  //   if (gameState === 3) {
+  //   if (gameState === "dealer AI") {
   //     runs dealerAI
   //      setGameState(4)
   //   }
-  //   if (gameState === 4) {
+  //   if (gameState === "decide winner") {
   //     compare scores
   //      setResult(result)
   //      setGameState(5)
   //   }
-  //   if (gameState === 5) {
+  //   if (gameState === "end page") {
   //     use result to render "you win" or "you lose" or "you tie"
   //       button to redeal setGameState(0)
   //   }
-
-  useEffect(() => {
-    if (AIState === "checking score") {
-      dealerPlaysHand();
-    }
-    if (AIState === "drawing a card") {
-      dealCardToDealer();
-    }
-    if (AIState === "end game") {
-      doesPlayerWin(dealerHand, playerHand);
-    }
-    if (AIState === "navigate") {
-      //link to /end;
-    }
-  });
 
   useEffect(() => {
     fetch(`http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`)
@@ -207,6 +191,18 @@ export default function App() {
     setAIState("navigate");
   };
 
+  if (AIState === "checking score") {
+    dealerPlaysHand();
+  }
+  if (AIState === "drawing a card") {
+    dealCardToDealer();
+  }
+  if (AIState === "end game") {
+    doesPlayerWin(dealerHand, playerHand);
+  }
+  if (AIState === "navigate") {
+    //link to /end;
+  }
   return (
     <>
       <main>
