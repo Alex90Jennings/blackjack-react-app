@@ -1,10 +1,9 @@
 import { Route, Routes } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./index.css";
 import Blackjack from "./Blackjack";
 import EndPage from "./EndPage";
 import StartPage from "./StartPage";
-import { useNavigate } from "react-router-dom";
 
 const cardValue = {
   2: 2,
@@ -16,11 +15,13 @@ const cardValue = {
   8: 8,
   9: 9,
   10: 10,
-  JACK: 10,
-  QUEEN: 10,
-  KING: 10,
-  ACE: 1,
+  11: 10,
+  12: 10,
+  13: 10,
+  14: 1,
 };
+
+let doubled = false;
 
 export default function App() {
   const [dealerHand, setDealerHand] = useState([]);
@@ -28,79 +29,40 @@ export default function App() {
   const [cardDeck, setCardDeck] = useState([]);
   const [AIState, setAIState] = useState("waiting");
   const [result, setResult] = useState(null);
+  const [gameState, setGameState] = useState(null);
+  const [wallet, setWallet] = useState(1000);
+  const [bet, setBet] = useState(250);
 
-  // const [gameState, setGameState] = useState(null)
-  //   if (gameState === "pre game") {
-  //     triggered by deal button;
-  //      deals the cards
-  //      setGameState(1)
-  //   }
-  //   if (gameState === "game prep") {
-  //     initialise game
-  //      deal 2 cards to player and 1 to dealer
-  //      setGameState(2)
-  //   }
-  //   if (gameState === "user input") {
-  //     player decides hit or stand
-  //      if player bust setGameState(4)
-  //      else setGameState(3)
-  //   }
-  //   if (gameState === "dealer AI") {
-  //     runs dealerAI
-  //      setGameState(4)
-  //   }
-  //   if (gameState === "decide winner") {
-  //     compare scores
-  //      setResult(result)
-  //      setGameState(5)
-  //   }
-  //   if (gameState === "end page") {
-  //     use result to render "you win" or "you lose" or "you tie"
-  //       button to redeal setGameState(0)
-  //   }
-
-  useEffect(() => {
-    fetch(`http://deckofcardsapi.com/api/deck/new/shuffle/?deck_count=1`)
-      .then((res) => res.json())
-      .then((cardDeck) => {
-        setCardDeck(cardDeck);
-      });
-  }, []);
-
-  const dealCardToDealer = async () => {
-    const response = await fetch(
-      `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=1`
-    );
-    const result = await response.json();
-    const card = result.cards[0];
-    setDealerHand([...dealerHand, card]);
-    if (AIState !== "waiting") {
-      setAIState("checking score");
+  const retrieveNewDeckOfCards = () => {
+    const suits = ["clubs", "diamonds", "hearts", "spades"];
+    const cards = [];
+    for (let i = 0; i < suits.length; i++) {
+      for (let j = 2; j < 15; j++) {
+        const card = { number: j, suit: suits[i] };
+        cards.push(card);
+      }
     }
+    setCardDeck(cards);
   };
 
-  const dealCardToPlayer = async () => {
-    const response = await fetch(
-      `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=1`
-    );
-    const result = await response.json();
-    const card = result.cards[0];
-    setPlayerHand([...playerHand, card]);
+  const dealCard = () => {
+    if (cardDeck.length > 0) {
+      const randomIndex = Math.floor(Math.random() * cardDeck.length);
+      const cardToDeal = cardDeck[randomIndex];
+      cardDeck.splice(randomIndex, 1);
+      return cardToDeal;
+    }
+    return false;
   };
 
-  const dealTwoCardsToPlayer = async () => {
-    const response = await fetch(
-      `http://deckofcardsapi.com/api/deck/${cardDeck.deck_id}/draw/?count=2`
-    );
-    const result = await response.json();
-    const cardOne = result.cards[0];
-    const cardTwo = result.cards[1];
-    setPlayerHand([cardOne, cardTwo]);
+  const dealCardToPlayer = () => {
+    const newCard = dealCard();
+    setPlayerHand([...playerHand, newCard]);
   };
 
-  const startGame = () => {
-    dealTwoCardsToPlayer();
-    dealCardToDealer();
+  const dealCardToDealer = () => {
+    const newCard = dealCard();
+    setDealerHand([...dealerHand, newCard]);
   };
 
   const dealerPlaysHand = () => {
@@ -112,8 +74,8 @@ export default function App() {
 
   const handHasAce = (hand) => {
     for (let i = 0; i < hand.length; i++) {
-      const numberOfCard = hand[i].value;
-      if (numberOfCard === "ACE") {
+      const numberOfCard = hand[i].number;
+      if (numberOfCard === 14) {
         return true;
       }
     }
@@ -125,10 +87,10 @@ export default function App() {
     let aceIsEleven = false;
     let makeElevenAceOne = false;
     for (let i = 0; i < hand.length; i++) {
-      const numberOfCard = hand[i].value;
+      const numberOfCard = hand[i].number;
       const valueOfCard = cardValue[numberOfCard];
       if (handHasAce(hand)) {
-        if (numberOfCard === "ACE" && !aceIsEleven) {
+        if (numberOfCard === 14 && !aceIsEleven) {
           aceIsEleven = true;
           sum += 10;
         }
@@ -163,33 +125,102 @@ export default function App() {
       "playerScore: ",
       countScore(playerHand)
     );
-    if (isBust(playerHand)) {
-      setResult("YOU LOSE");
-    }
-    if (isBust(dealerHand)) {
-      setResult("YOU WIN");
-    }
     if (
       isTwentyOne(playerHand) === "BLACKJACK" &&
       isTwentyOne(dealerHand) !== "BLACKJACK"
     ) {
+      console.log("you got a blackjack and the dealer didn't");
       setResult("YOU WIN DOUBLE");
+      return;
     }
-    if (isTwentyOne(dealerHand) === 0 && isTwentyOne(playerHand) !== 0) {
+    if (isBust(playerHand)) {
+      console.log("player went bust");
       setResult("YOU LOSE");
+      return;
+    }
+    if (
+      isTwentyOne(dealerHand) === "BLACKJACK" &&
+      isTwentyOne(playerHand) !== "BLACKJACK"
+    ) {
+      console.log("dealer got a blackjack and you didn't");
+      setResult("YOU LOSE");
+      return;
+    }
+    if (isBust(dealerHand)) {
+      console.log("dealer went bust");
+      setResult("YOU WIN");
+      return;
     }
     if (countScore(dealerHand) > countScore(playerHand)) {
+      console.log("dealer got a higher hand than you");
       setResult("YOU LOSE");
+      return;
     }
     if (countScore(dealerHand) < countScore(playerHand)) {
+      console.log("you got a higher hand than the dealer");
       setResult("YOU WIN");
+      return;
     }
     if (countScore(dealerHand) === countScore(playerHand)) {
+      console.log("you got the same score");
       setResult("IT'S A TIE");
+      return;
     }
-
-    setAIState("navigate");
   };
+
+  if (bet > wallet) setBet(wallet);
+
+  if (gameState === "retrieve deck of cards") {
+    retrieveNewDeckOfCards();
+    setGameState("betting");
+  }
+  if (gameState === "betting") {
+  }
+  if (gameState === "deal first card to player") {
+    dealCardToPlayer();
+    setGameState("deal second card to player");
+  }
+  if (gameState === "deal second card to player") {
+    dealCardToPlayer();
+    setGameState("deal first card to dealer");
+  }
+  if (gameState === "deal first card to dealer") {
+    dealCardToDealer();
+    setGameState("player decision");
+  }
+  if (gameState === "player decision") {
+    if (isTwentyOne(playerHand) === "BLACKJACK" && countScore(dealerHand) < 10)
+      setGameState("end game");
+    if (isBust(playerHand)) setGameState("compare scores");
+  }
+  if (gameState === "double") {
+    setBet(bet * 2);
+    dealCardToPlayer();
+    doubled = true;
+    setGameState("player decision");
+  }
+  if (gameState === "dealer AI") {
+    doubled = false;
+    setAIState("checking score");
+  }
+  if (gameState === "compare scores") {
+    doesPlayerWin(dealerHand, playerHand);
+    setGameState("end game");
+  }
+  if (gameState === "end game") {
+    setGameState("result");
+  }
+
+  if (AIState === "checking score") {
+    dealerPlaysHand();
+  }
+  if (AIState === "drawing a card") {
+    dealCardToDealer();
+  }
+  if (AIState === "end game") {
+    setAIState("waiting");
+    setGameState("compare scores");
+  }
 
   if (AIState === "checking score") {
     dealerPlaysHand();
@@ -207,9 +238,8 @@ export default function App() {
     <>
       <main>
         <Routes>
-          <Route path="/" element={<StartPage />} />
+          <Route path="/" element={<StartPage setGameState={setGameState} />} />
           <Route
-            // {AIState === "navigate" ? <Redirect to="/end" /> : <EndPage result={result} />}
             path="/play"
             element={
               <Blackjack
@@ -222,12 +252,33 @@ export default function App() {
                 dealerPlaysHand={dealerPlaysHand}
                 isBust={isBust}
                 isTwentyOne={isTwentyOne}
-                startGame={startGame}
-                setAIState={setAIState}
+                setGameState={setGameState}
+                result={result}
+                wallet={wallet}
+                setWallet={setWallet}
+                bet={bet}
+                setBet={setBet}
+                doubled={doubled}
               />
             }
           />
-          <Route path="/end" element={<EndPage result={result} />} />
+          <Route
+            path="/end"
+            element={
+              <EndPage
+                setGameState={setGameState}
+                setCardDeck={setCardDeck}
+                setAIState={setAIState}
+                setPlayerHand={setPlayerHand}
+                setDealerHand={setDealerHand}
+                setResult={setResult}
+                result={result}
+                wallet={wallet}
+                setWallet={setWallet}
+                bet={bet}
+              />
+            }
+          />
         </Routes>
       </main>
     </>
