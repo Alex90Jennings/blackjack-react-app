@@ -1,37 +1,18 @@
 import { Route, Routes } from "react-router-dom";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import "./index.css";
 import Blackjack from "./Blackjack";
 import EndPage from "./EndPage";
 import StartPage from "./StartPage";
+import { StateContext } from './StateContext';
 
-const cardValue = {
-  2: 2,
-  3: 3,
-  4: 4,
-  5: 5,
-  6: 6,
-  7: 7,
-  8: 8,
-  9: 9,
-  10: 10,
-  11: 10,
-  12: 10,
-  13: 10,
-  14: 1,
-};
 
+const cardValue = {2:2,3:3,4:4,5:5,6:6,7:7,8:8,9:9,10:10,11:10,12:10,13:10,14:1};
 let doubled = false;
 
 export default function App() {
-  const [dealerHand, setDealerHand] = useState([]);
-  const [playerHand, setPlayerHand] = useState([]);
-  const [cardDeck, setCardDeck] = useState([]);
-  const [AIState, setAIState] = useState("waiting");
-  const [result, setResult] = useState(null);
-  const [gameState, setGameState] = useState(null);
-  const [wallet, setWallet] = useState(1000);
-  const [bet, setBet] = useState(250);
+  const state = useContext(StateContext)
+  const { cardDeck, setPlayerHand, playerHand, setDealerHand, setAIState, setResult, bet, wallet, setBet, setGameState, dealerHand, gameState, AIState, setCardDeck } = state
 
   const retrieveNewDeckOfCards = () => {
     const suits = ["clubs", "diamonds", "hearts", "spades"];
@@ -237,49 +218,29 @@ export default function App() {
   return (
     <>
       <main>
-        <Routes>
-          <Route path="/" element={<StartPage setGameState={setGameState} />} />
-          <Route
-            path="/play"
-            element={
-              <Blackjack
-                cardDeck={cardDeck}
-                setCardDeck={setCardDeck}
-                dealerHand={dealerHand}
-                playerHand={playerHand}
-                dealCardToPlayer={dealCardToPlayer}
-                countScore={countScore}
-                dealerPlaysHand={dealerPlaysHand}
-                isBust={isBust}
-                isTwentyOne={isTwentyOne}
-                setGameState={setGameState}
-                result={result}
-                wallet={wallet}
-                setWallet={setWallet}
-                bet={bet}
-                setBet={setBet}
-                doubled={doubled}
-              />
-            }
-          />
-          <Route
-            path="/end"
-            element={
-              <EndPage
-                setGameState={setGameState}
-                setCardDeck={setCardDeck}
-                setAIState={setAIState}
-                setPlayerHand={setPlayerHand}
-                setDealerHand={setDealerHand}
-                setResult={setResult}
-                result={result}
-                wallet={wallet}
-                setWallet={setWallet}
-                bet={bet}
-              />
-            }
-          />
-        </Routes>
+        <StateContext.Provider value={{
+            dealerHand: dealerHand,
+            setDealerHand: setDealerHand,
+            playerHand: playerHand,
+            setPlayerHand: setPlayerHand,
+            cardDeck: cardDeck,
+            setCardDeck: setCardDeck,
+            AIState: AIState,
+            setAIState: setAIState,
+            result: result,
+            setResult: setResult,
+            gameState: gameState,
+            setGameState: setGameState,
+            wallet: wallet,
+            setWallet: setWallet,
+            bet: bet,
+            setBet: setBet}} >
+          <Routes>
+            <Route path="/" element={<StartPage/>} />
+            <Route path="/play" element={<Blackjack/>} />
+            <Route path="/end" element={<EndPage/>}/>
+          </Routes>
+        </StateContext.Provider>
       </main>
     </>
   );
