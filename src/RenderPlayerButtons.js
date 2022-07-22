@@ -1,6 +1,4 @@
 import { Link } from "react-router-dom";
-import { StateContext } from './StateContext';
-import { useContext } from "react";
 
 function RenderCards(props) {
   const hand = props.hand;
@@ -11,14 +9,11 @@ function RenderCards(props) {
   const wallet = props.wallet
   const dealerHand = props.dealerHand
   const result = props.result
+  const bet = props.bet
   const setBet = props.setBet
   const countScore = props.countScore
   const doubled = props.doubled
-  const bet = props.bet
-  
-  const value = useContext(StateContext)
 
-  console.log(value)
 
   const increaseBetAmount = () => {
     if(wallet - bet >= 5) setBet(bet+5)

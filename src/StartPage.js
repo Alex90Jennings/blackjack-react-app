@@ -1,12 +1,7 @@
 import { Link } from "react-router-dom";
-import { useContext } from "react";
-import { StateContext } from './StateContext';
 
 function StartPage(props) {
   const setGameState = props.setGameState;
-
-  const {bet} = useContext(StateContext)
-  console.log(bet)
 
   return (
     <div className="centering">
