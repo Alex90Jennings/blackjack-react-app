@@ -1,43 +1,41 @@
 import { Link } from "react-router-dom";
 
-  let adjustedWallet = false
+let adjustedWallet = false;
 
 function EndPage(props) {
   const result = props.result;
-  const setGameState = props.setGameState
-  const setPlayerHand = props.setPlayerHand
-  const setDealerHand = props.setDealerHand
-  const setCardDeck = props.setCardDeck
-  const setAIState = props.setAIState
-  const setResult = props.setResult
-  const wallet = props.wallet
-  const setWallet = props.setWallet
-  const bet = props.bet
+  const setGameState = props.setGameState;
+  const setPlayerHand = props.setPlayerHand;
+  const setDealerHand = props.setDealerHand;
+  const setCardDeck = props.setCardDeck;
+  const setAIState = props.setAIState;
+  const setResult = props.setResult;
+  const wallet = props.wallet;
+  const setWallet = props.setWallet;
+  const bet = props.bet;
 
+  if (result === "YOU WIN" && !adjustedWallet) {
+    adjustedWallet = true;
+    setWallet(wallet + bet);
+  }
+  if (result === "YOU WIN DOUBLE" && !adjustedWallet) {
+    adjustedWallet = true;
+    setWallet(wallet + bet + bet);
+  }
+  if (result === "YOU LOSE" && !adjustedWallet) {
+    adjustedWallet = true;
+    setWallet(wallet - bet);
+  }
 
-  
-  if(result==="YOU WIN" && !adjustedWallet){
-    adjustedWallet = true
-    setWallet(wallet + bet)
-  }
-  if(result==="YOU WIN DOUBLE" && !adjustedWallet){
-    adjustedWallet = true
-    setWallet(wallet + bet + bet)
-  }
-  if(result==="YOU LOSE" && !adjustedWallet){
-    adjustedWallet = true
-    setWallet(wallet - bet)
-  }
-  
   const handleClick = () => {
-    adjustedWallet = false
-    setPlayerHand([])
-    setDealerHand([])
-    setCardDeck([])
-    setAIState("waiting")
-    setResult(null)
-    setGameState("retrieve deck of cards")
-  }
+    adjustedWallet = false;
+    setPlayerHand([]);
+    setDealerHand([]);
+    setCardDeck([]);
+    setAIState("waiting");
+    setResult(null);
+    setGameState("retrieve deck of cards");
+  };
 
   return (
     <div className="centering">
@@ -49,20 +47,26 @@ function EndPage(props) {
             <div>
               <div className="three-columns-expand-one-three">
                 <div></div>
-                <h1>{wallet>0 ? `${result}` : "YOU LOST ALL YOUR MONEY"} </h1>
+                <h1>{wallet > 0 ? `${result}` : "YOU LOST ALL YOUR MONEY"} </h1>
                 <div></div>
-              </div>         
+              </div>
               <div className="three-columns-expand-one-three">
                 <div></div>
                 <h2>REMAINING BALANCE: {`${wallet}`}</h2>
                 <div></div>
-              </div>            
+              </div>
             </div>
             <div></div>
           </div>
-          <div className= "three-columns-expand-one-three">
+          <div className="three-columns-expand-one-three">
             <div></div>
-            {wallet>0 ? <button className="center-wrapper" onClick={() => handleClick()}><Link to="/play">PLAY AGAIN</Link></button> : ""} 
+            {wallet > 0 ? (
+              <button className="center-wrapper" onClick={() => handleClick()}>
+                <Link to="/play">PLAY AGAIN</Link>
+              </button>
+            ) : (
+              ""
+            )}
             <div></div>
           </div>
         </div>

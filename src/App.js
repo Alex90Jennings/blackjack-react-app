@@ -33,6 +33,20 @@ export default function App() {
   const [wallet, setWallet] = useState(1000);
   const [bet, setBet] = useState(250);
 
+  // const machine = {
+  //   gameState: "null",
+  //   playerHand: [],
+  //   wallet: 1000,
+  //   bet: 250,
+  //   isBust: false,
+  //   currentScore: countScore(playerHand),
+  //   canDouble: false
+  //   dealerHand: [],
+  //   dealCanBlackjack: false,
+  //   AIState: "waiting"
+  //   result: null
+  //  }
+
   const retrieveNewDeckOfCards = () => {
     const suits = ["clubs", "diamonds", "hearts", "spades"];
     const cards = [];
@@ -50,9 +64,16 @@ export default function App() {
       const randomIndex = Math.floor(Math.random() * cardDeck.length);
       const cardToDeal = cardDeck[randomIndex];
       cardDeck.splice(randomIndex, 1);
+      console.log(cardToDeal);
       return cardToDeal;
     }
     return false;
+  };
+
+  const dealFirstCardsToPlayer = () => {
+    const firstCard = dealCard();
+    const secondCard = dealCard()
+    setPlayerHand([firstCard, secondCard]);
   };
 
   const dealCardToPlayer = () => {
@@ -111,6 +132,7 @@ export default function App() {
       } else return 21;
     } else return countScore(hand);
   };
+
   const isBust = (hand) => {
     if (countScore(hand) < 22) {
       return false;
@@ -120,10 +142,8 @@ export default function App() {
 
   const doesPlayerWin = (dealerHand, playerHand) => {
     console.log(
-      "dealer score: ",
-      countScore(dealerHand),
-      "playerScore: ",
-      countScore(playerHand)
+      `dealer score: ${countScore(dealerHand)}, 
+      playerScore: ${countScore(playerHand)}`
     );
     if (
       isTwentyOne(playerHand) === "BLACKJACK" &&
@@ -133,32 +153,22 @@ export default function App() {
       setResult("YOU WIN DOUBLE");
       return;
     }
-    if (isBust(playerHand)) {
-      console.log("player went bust");
-      setResult("YOU LOSE");
+    if (
+      !isBust(playerHand) &&
+      (countScore(dealerHand) < countScore(playerHand) || isBust(dealerHand))
+    ) {
+      console.log("you got a better hand than the dealer");
+      setResult("YOU WIN");
       return;
     }
     if (
-      isTwentyOne(dealerHand) === "BLACKJACK" &&
-      isTwentyOne(playerHand) !== "BLACKJACK"
+      countScore(dealerHand) > countScore(playerHand) ||
+      (isTwentyOne(dealerHand) === "BLACKJACK" &&
+        isTwentyOne(playerHand) !== "BLACKJACK") ||
+      isBust(playerHand)
     ) {
-      console.log("dealer got a blackjack and you didn't");
+      console.log("dealer has a better hand than you");
       setResult("YOU LOSE");
-      return;
-    }
-    if (isBust(dealerHand)) {
-      console.log("dealer went bust");
-      setResult("YOU WIN");
-      return;
-    }
-    if (countScore(dealerHand) > countScore(playerHand)) {
-      console.log("dealer got a higher hand than you");
-      setResult("YOU LOSE");
-      return;
-    }
-    if (countScore(dealerHand) < countScore(playerHand)) {
-      console.log("you got a higher hand than the dealer");
-      setResult("YOU WIN");
       return;
     }
     if (countScore(dealerHand) === countScore(playerHand)) {
@@ -168,26 +178,29 @@ export default function App() {
     }
   };
 
-  if (bet > wallet) setBet(wallet);
+  if (bet > wallet) {
+    setBet(wallet);
+  }
+
+  //tidy the initial stages of the game (FINITE STATE MACHINE)
 
   if (gameState === "retrieve deck of cards") {
     retrieveNewDeckOfCards();
     setGameState("betting");
   }
   if (gameState === "betting") {
+    console.log("player choosing how much to bet");
   }
-  if (gameState === "deal first card to player") {
-    dealCardToPlayer();
-    setGameState("deal second card to player");
-  }
-  if (gameState === "deal second card to player") {
-    dealCardToPlayer();
-    setGameState("deal first card to dealer");
-  }
-  if (gameState === "deal first card to dealer") {
+  if (gameState === "initialise game") {
+    dealFirstCardsToPlayer();
+    console.log("first cards");
     dealCardToDealer();
+    console.log("dealer card");
     setGameState("player decision");
   }
+
+  //up to this point could be one state
+
   if (gameState === "player decision") {
     if (isTwentyOne(playerHand) === "BLACKJACK" && countScore(dealerHand) < 10)
       setGameState("end game");
