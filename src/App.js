@@ -33,20 +33,6 @@ export default function App() {
   const [wallet, setWallet] = useState(1000);
   const [bet, setBet] = useState(250);
 
-  // const machine = {
-  //   gameState: "null",
-  //   playerHand: [],
-  //   wallet: 1000,
-  //   bet: 250,
-  //   isBust: false,
-  //   currentScore: countScore(playerHand),
-  //   canDouble: false
-  //   dealerHand: [],
-  //   dealCanBlackjack: false,
-  //   AIState: "waiting"
-  //   result: null
-  //  }
-
   const retrieveNewDeckOfCards = () => {
     const suits = ["clubs", "diamonds", "hearts", "spades"];
     const cards = [];
