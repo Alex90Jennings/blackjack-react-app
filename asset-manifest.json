@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/react-blackjack/static/css/main.e1fd7bed.css",
-    "main.js": "/react-blackjack/static/js/main.3b40897c.js",
-    "static/js/787.b6e644c2.chunk.js": "/react-blackjack/static/js/787.b6e644c2.chunk.js",
-    "index.html": "/react-blackjack/index.html",
-    "main.e1fd7bed.css.map": "/react-blackjack/static/css/main.e1fd7bed.css.map",
-    "main.3b40897c.js.map": "/react-blackjack/static/js/main.3b40897c.js.map",
-    "787.b6e644c2.chunk.js.map": "/react-blackjack/static/js/787.b6e644c2.chunk.js.map"
+    "main.css": "/blackjack-react-app/static/css/main.e1fd7bed.css",
+    "main.js": "/blackjack-react-app/static/js/main.462e91e8.js",
+    "static/js/787.b6e644c2.chunk.js": "/blackjack-react-app/static/js/787.b6e644c2.chunk.js",
+    "index.html": "/blackjack-react-app/index.html",
+    "main.e1fd7bed.css.map": "/blackjack-react-app/static/css/main.e1fd7bed.css.map",
+    "main.462e91e8.js.map": "/blackjack-react-app/static/js/main.462e91e8.js.map",
+    "787.b6e644c2.chunk.js.map": "/blackjack-react-app/static/js/787.b6e644c2.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e1fd7bed.css",
-    "static/js/main.3b40897c.js"
+    "static/js/main.462e91e8.js"
   ]
 }
