@@ -25,7 +25,7 @@ Adjust your bet using the plus and minus buttons, when happy with the amount “
 
 Use the buttons under the cards to direct the game until there is a winner
 
-Click the button “YOU WON” or “YOU LOST” and then “PLAY AGAIN” to keep playing
+Click the button with emojis, “YOU WON”, "YOU TIED" or “YOU LOST” to contine, and then “PLAY AGAIN” to play another hand
 
 # Getting Started with Create React App
 
