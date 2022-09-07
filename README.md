@@ -1,3 +1,22 @@
+# Motivation and Learning Objectives
+
+## This app is deployed with github pages - https://alex90jennings.github.io/blackjack-react-app/
+
+After 3 months of full time coding bootcamp, it's time to test our new skills! Given 2 days and unlimited freedom, we were instructed to create whatever we wanted.
+I decided that coding a card game woudld be a great demonstration of how much we've progressed over the 3 months, testing my knowledge of all things frontend.
+
+My main learning objectives was to reach the MVP of a working one player game within the time constraint, whilst writing code that is readable and managing react state efficiently.
+
+The game follows the standard casino rules for Blackjack, where the aim is to achieve a score of 21 without going over. The winner will have a higher score than the loser, but any score above 21 is an automatic loss.
+
+The most challenging aspect of the project was the game logic, ensuring that the crrect hand won depending on the rules. 
+In order to achieve this, I used TDD to test for all possible outcomes of the game. 
+I found that TDD, although it takes up a lot of time initially, writes fantastic concise code and saves time in the long run in the avoidance of bugs in the logic. 
+
+Now, I am a big fan of TDD and hope all future projects and codebases come with a great set of tests!
+
+Having
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
