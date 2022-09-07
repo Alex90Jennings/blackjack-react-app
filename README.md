@@ -9,7 +9,7 @@ My main learning objectives was to reach the MVP of a working one player game wi
 
 The game follows the standard casino rules for Blackjack, where the aim is to achieve a score of 21 without going over. The winner will have a higher score than the loser, but any score above 21 is an automatic loss.
 
-The most challenging aspect of the project was the game logic, ensuring that the crrect hand won depending on the rules. 
+The most challenging aspect of the project was the game logic, ensuring that the correct hand won depending on the Blackjack rules. 
 In order to achieve this, I used TDD to test for all possible outcomes of the game. 
 I found that TDD, although it takes up a lot of time initially, writes fantastic concise code and saves time in the long run in the avoidance of bugs in the logic. 
 
