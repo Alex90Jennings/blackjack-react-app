@@ -15,6 +15,18 @@ I found that TDD, although it takes up a lot of time initially, writes fantastic
 
 Now, I am a big fan of TDD and hope all future projects and codebases come with a great set of tests!
 
+# Instructions
+
+Visit the URL - https://alex90jennings.github.io/blackjack-react-app/
+
+Click on “DEAL”
+
+Adjust your bet using the plus and minus buttons, when happy with the amount “CLICK TO BET”
+
+Use the buttons under the cards to direct the game until there is a winner
+
+Click the button “YOU WON” or “YOU LOST” and then “PLAY AGAIN” to keep playing
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
