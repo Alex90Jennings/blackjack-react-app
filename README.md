@@ -15,8 +15,6 @@ I found that TDD, although it takes up a lot of time initially, writes fantastic
 
 Now, I am a big fan of TDD and hope all future projects and codebases come with a great set of tests!
 
-Having
-
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
