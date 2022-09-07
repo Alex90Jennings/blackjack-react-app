@@ -25,7 +25,9 @@ Adjust your bet using the plus and minus buttons, when happy with the amount “
 
 Use the buttons under the cards to direct the game until there is a winner
 
-Click the button with emojis, “YOU WON”, "YOU TIED" or “YOU LOST” to contine, and then “PLAY AGAIN” to play another hand
+Click the button “YOU WON”, "YOU TIED", “YOU LOST” or the row of emojis to contine, and then “PLAY AGAIN” to play another hand
+
+Your wallet will reflect how successful you have been in the game, until the page is refreshed reseting the wallet to $1000
 
 # Getting Started with Create React App
 
