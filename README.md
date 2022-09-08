@@ -2,7 +2,7 @@
 
 ## This app is deployed with github pages - https://alex90jennings.github.io/blackjack-react-app/
 
-After 3 months of full time coding bootcamp, it's time to test our new skills! Given 2 days and unlimited freedom, we were instructed to create whatever we wanted.
+After 3 months of full time coding bootcamp, we are at the midpoint of the course and it's time to test our new skills! Given 2 days and unlimited freedom, we were instructed to create whatever we wanted.
 I decided that coding a card game woudld be a great demonstration of how much we've progressed over the 3 months, testing my knowledge of all things frontend.
 
 My main learning objectives was to reach the MVP of a working one player game within the time constraint, whilst writing code that is readable and managing react state efficiently.
